@@ -33,8 +33,8 @@ public class ClientHandler implements Runnable {
                         clientSocket.close();
                         break;
                     case "/who":
-                        //Metod
-                        break;
+                        sendMessage(commandWho(),clientSocket);
+                        continue;
                     case "/nick":
                         //Metod
                         break;
@@ -55,9 +55,20 @@ public class ClientHandler implements Runnable {
             e.printStackTrace();
         }
     }
+    private void sendMessage(String msg, Socket client){
+        try {
+            PrintWriter printWriter = new PrintWriter(client.getOutputStream(), true);
+            printWriter.println(msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private String commandWho(){
         StringBuilder sb = new StringBuilder();
-        return null;
+        for (ClientHandler ch:clients) {
+            sb.append(ch.nickname + "\n");
+        }
+        return sb.toString();
     }
 }
