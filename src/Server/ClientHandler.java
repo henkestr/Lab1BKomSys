@@ -27,20 +27,20 @@ public class ClientHandler implements Runnable {
 
             while (true) {
                 String msg = bufferedReader.readLine();
-                switch (msg){
+                switch (msg.split(" ")[0]){
                     case "/quit":
                         // Skapa metod för denna
                         clientSocket.close();
-                        break;
+                        continue;
                     case "/who":
                         sendMessage(commandWho(),clientSocket);
                         continue;
-                    case "/nick":
-                        //Metod
-                        break;
+                    case  "/nick":
+                        commandNickname(msg.split(" ")[1]);
+                        continue;
                     case "/help":
                         //Metod
-                        break;
+                        continue;
                 }
 
                 System.out.println(nickname);
@@ -70,5 +70,16 @@ public class ClientHandler implements Runnable {
             sb.append(ch.nickname + "\n");
         }
         return sb.toString();
+    }
+
+    private void commandNickname(String nickname){
+        this.nickname = nickname;
+    }
+
+    private String commandHelp(){
+        return null;
+    }
+    private void commanQuit(){
+
     }
 }
