@@ -11,17 +11,18 @@ public class Server {
 
     public static void main(String[] args) {
         ServerSocket serverSocket = null;
-        ArrayList<Socket> clients = new ArrayList<>();
+        ArrayList<ClientHandler> clients = new ArrayList<>();
         try {
             serverSocket = new ServerSocket(PORT);
             while (true) {
                 Socket socket = serverSocket.accept();
                 System.out.println(socket.getInetAddress());
 
-                clients.add(socket);
+                ClientHandler clientHandler = new ClientHandler(clients, socket);
+                clients.add(clientHandler);
                 // Starting new thread
-                Thread clientHandler = new Thread(new ClientHandler(clients, socket));
-                clientHandler.start();
+                Thread clientHandlerThread = new Thread(clientHandler);
+                clientHandlerThread.start();
             }
         } catch (IOException e) {
             e.printStackTrace();

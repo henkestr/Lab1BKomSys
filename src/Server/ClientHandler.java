@@ -9,11 +9,11 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class ClientHandler implements Runnable {
-    private ArrayList<Socket> clients;
+    private ArrayList<ClientHandler> clients;
     private Socket clientSocket;
     private String nickname;
 
-    public ClientHandler(ArrayList<Socket> clients, Socket clientSocket) {
+    public ClientHandler(ArrayList<ClientHandler> clients, Socket clientSocket) {
         this.clients = clients;
         this.clientSocket = clientSocket;
         nickname = "User" + clientSocket.getPort();
@@ -27,10 +27,26 @@ public class ClientHandler implements Runnable {
 
             while (true) {
                 String msg = bufferedReader.readLine();
+                switch (msg){
+                    case "/quit":
+                        // Skapa metod för denna
+                        clientSocket.close();
+                        break;
+                    case "/who":
+                        //Metod
+                        break;
+                    case "/nick":
+                        //Metod
+                        break;
+                    case "/help":
+                        //Metod
+                        break;
+                }
+
                 System.out.println(nickname);
-                for (Socket s : clients) {
-                    if (s != clientSocket) {
-                        printWriter = new PrintWriter(s.getOutputStream(), true);
+                for (ClientHandler ch : clients) {
+                    if (ch.clientSocket != clientSocket) {
+                        printWriter = new PrintWriter(ch.clientSocket.getOutputStream(), true);
                         printWriter.println(String.format("%s says: %s", nickname, msg));
                     }
                 }
@@ -38,5 +54,10 @@ public class ClientHandler implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String commandWho(){
+        StringBuilder sb = new StringBuilder();
+        return null;
     }
 }
