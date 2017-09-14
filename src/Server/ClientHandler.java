@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 public class ClientHandler implements Runnable {
@@ -29,9 +30,8 @@ public class ClientHandler implements Runnable {
                 String msg = bufferedReader.readLine();
                 switch (msg.split(" ")[0]){
                     case "/quit":
-                        // Skapa metod för denna
-                        clientSocket.close();
-                        continue;
+                        commandQuit();
+                        break;
                     case "/who":
                         sendMessage(commandWho(),clientSocket);
                         continue;
@@ -52,7 +52,7 @@ public class ClientHandler implements Runnable {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Socket to user"+ this.nickname + " is closed");
         }
     }
     private void sendMessage(String msg, Socket client){
@@ -77,9 +77,18 @@ public class ClientHandler implements Runnable {
     }
 
     private String commandHelp(){
-        return null;
+        return "Available commands: \n /who \n /nick \n /quit ";
     }
-    private void commanQuit(){
 
+    private void commandQuit(){
+        sendMessage("byebye", clientSocket);
+        clients.remove(this);
+        try {
+            clientSocket.shutdownInput();
+            clientSocket.shutdownOutput();
+            clientSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
