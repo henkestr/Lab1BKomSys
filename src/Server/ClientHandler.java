@@ -39,7 +39,7 @@ public class ClientHandler implements Runnable {
                         commandNickname(msg.split(" ")[1]);
                         continue;
                     case "/help":
-                        //Metod
+                        sendMessage(commandHelp(),clientSocket);
                         continue;
                 }
 
@@ -80,13 +80,13 @@ public class ClientHandler implements Runnable {
         return "Available commands: \n /who \n /nick \n /quit ";
     }
 
-    private void commandQuit(){
+    private void commandQuit() {
         sendMessage("byebye", clientSocket);
         clients.remove(this);
         try {
+            clientSocket.close();
             clientSocket.shutdownInput();
             clientSocket.shutdownOutput();
-            clientSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
