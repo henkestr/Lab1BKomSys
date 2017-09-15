@@ -23,7 +23,6 @@ public class Server {
                 // Starting new thread
                 Thread clientHandlerThread = new Thread(clientHandler);
                 clientHandlerThread.start();
-
             }
         } catch (IOException e) {
             e.printStackTrace();

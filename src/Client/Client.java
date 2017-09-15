@@ -25,16 +25,20 @@ public class Client {
             buffReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             while (true) {
                 String msg = buffReader.readLine();
-                System.out.println(msg);
+                if (msg.equals("byebye")){
+                    continue;
+                }else
+                    System.out.println(msg);
             }
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Lost connection to the server");
         } finally {
             try {
                 if (socket != null) {
                     socket.close();
+                    System.exit(0);
                 }
             } catch (IOException e) {
                 e.printStackTrace();

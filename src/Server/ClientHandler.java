@@ -41,9 +41,15 @@ public class ClientHandler implements Runnable {
                     case "/help":
                         sendMessage(commandHelp(),clientSocket);
                         continue;
+                    default:
+                        if(msg.indexOf("/") == 0) {
+                            sendMessage("Incorrect command", clientSocket);
+                            continue;
+                        }
+                        break;
                 }
 
-                System.out.println(nickname);
+                System.out.println(String.format("%s connected to the server",nickname));
                 for (ClientHandler ch : clients) {
                     if (ch.clientSocket != clientSocket) {
                         printWriter = new PrintWriter(ch.clientSocket.getOutputStream(), true);
@@ -52,15 +58,28 @@ public class ClientHandler implements Runnable {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Socket to user"+ this.nickname + " is closed");
+            System.out.println(String.format("Socket to user %s is closed", this.nickname));
+        }
+        finally {
+            if(clientSocket != null) {
+                clients.remove(this);
+                try {
+                    clientSocket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
     private void sendMessage(String msg, Socket client){
-        try {
-            PrintWriter printWriter = new PrintWriter(client.getOutputStream(), true);
-            printWriter.println(msg);
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (int i = 0; i<10; i++){
+            try {
+                PrintWriter printWriter = new PrintWriter(client.getOutputStream(), true);
+                printWriter.println(msg);
+                break;
+            } catch (IOException e) {
+                System.out.println("Could not send message. Retrying to send");
+            }
         }
     }
 
@@ -85,10 +104,12 @@ public class ClientHandler implements Runnable {
         clients.remove(this);
         try {
             clientSocket.close();
-            clientSocket.shutdownInput();
-            clientSocket.shutdownOutput();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        finally {
+            if(clientSocket != null)
+                clientSocket = null;
         }
     }
 }
