@@ -17,10 +17,12 @@ public class StringSender implements Runnable {
         Scanner scanner = new Scanner(System.in);
         try {
             PrintWriter writer = new PrintWriter(serverSocket.getOutputStream(), true);
-            while (true)
+            while (scanner.hasNextLine())
                 writer.println(scanner.nextLine());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Connection to the server is closed");
+        }finally {
+            scanner.close();
         }
     }
 }

@@ -49,7 +49,7 @@ public class ClientHandler implements Runnable {
                         break;
                 }
 
-                System.out.println(String.format("%s connected to the server",nickname));
+                System.out.println(String.format("%s wrote a message",nickname));
                 for (ClientHandler ch : clients) {
                     if (ch.clientSocket != clientSocket) {
                         printWriter = new PrintWriter(ch.clientSocket.getOutputStream(), true);

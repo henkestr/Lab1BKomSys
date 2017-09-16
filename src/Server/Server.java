@@ -6,17 +6,14 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class Server {
-    private static final int PORT = 5000;
-
-
     public static void main(String[] args) {
         ServerSocket serverSocket = null;
         ArrayList<ClientHandler> clients = new ArrayList<>();
         try {
-            serverSocket = new ServerSocket(PORT);
+            serverSocket = new ServerSocket(Integer.parseInt(args[0]));
             while (true) {
                 Socket socket = serverSocket.accept();
-                System.out.println(socket.getInetAddress());
+                System.out.println(String.format("A user with IP %s connected to the server",socket.getInetAddress()));
 
                 ClientHandler clientHandler = new ClientHandler(clients, socket);
                 clients.add(clientHandler);
@@ -27,8 +24,6 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
 }

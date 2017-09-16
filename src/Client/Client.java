@@ -8,15 +8,14 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class Client {
-    private static final int PORT = 5000;
 
     public static void main(String[] args) {
         Socket socket = null;
         BufferedReader buffReader = null;
         try {
             // Connecting to the server
-            InetAddress serverAdress = InetAddress.getLocalHost();
-            socket = new Socket(serverAdress, PORT);
+            InetAddress serverAdress = InetAddress.getByName((args[0]));
+            socket = new Socket(serverAdress, Integer.parseInt(args[1]));
 
             // Starting new thread
             Thread stringSender = new Thread(new StringSender(socket));
@@ -31,7 +30,7 @@ public class Client {
                     System.out.println(msg);
             }
         } catch (UnknownHostException e) {
-            e.printStackTrace();
+            System.out.println("Unknown Host");
         } catch (IOException e) {
             System.out.println("Lost connection to the server");
         } finally {
