@@ -62,7 +62,8 @@ public class ClientHandler implements Runnable {
         }
         finally {
             if(clientSocket != null) {
-                clients.remove(this);
+                //clients.remove(this);
+                removeClient(clients, this);
                 try {
                     clientSocket.close();
                 } catch (IOException e) {
@@ -101,7 +102,8 @@ public class ClientHandler implements Runnable {
 
     private void commandQuit() {
         sendMessage("byebye", clientSocket);
-        clients.remove(this);
+        //clients.remove(this);
+        removeClient(clients, this);
         try {
             clientSocket.close();
         } catch (IOException e) {
@@ -111,5 +113,9 @@ public class ClientHandler implements Runnable {
             if(clientSocket != null)
                 clientSocket = null;
         }
+    }
+
+    private synchronized void removeClient(ArrayList<ClientHandler> clientHandlers, ClientHandler client) {
+        clientHandlers.remove(client);
     }
 }

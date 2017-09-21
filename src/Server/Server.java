@@ -16,7 +16,8 @@ public class Server {
                 System.out.println(String.format("A user with IP %s connected to the server",socket.getInetAddress()));
 
                 ClientHandler clientHandler = new ClientHandler(clients, socket);
-                clients.add(clientHandler);
+                //clients.add(clientHandler);
+                addClient(clients, clientHandler);
                 // Starting new thread
                 Thread clientHandlerThread = new Thread(clientHandler);
                 clientHandlerThread.start();
@@ -24,6 +25,10 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static synchronized void addClient(ArrayList<ClientHandler> clientHandlers, ClientHandler client) {
+        clientHandlers.add(client);
     }
 
 }
